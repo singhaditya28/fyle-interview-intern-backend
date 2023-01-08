@@ -100,3 +100,85 @@ def test_grade_assignment_draft_assignment(client, h_teacher_1):
     data = response.json
 
     assert data['error'] == 'FyleError'
+
+
+def test_grading(client, h_teacher_1):
+    response = client.post(
+        '/teacher/assignments/grade',
+        headers=h_teacher_1,
+        json={
+            "id": 1,
+            "grade": "A"
+        }
+    )
+
+    assert response.status_code == 200
+
+    data = response.json['data']
+    assert data['teacher_id'] == 1
+    assert data['state'] == 'GRADED'
+
+
+def test_grading_2(client, h_teacher_2):
+    response = client.post(
+        '/teacher/assignments/grade',
+        headers=h_teacher_2,
+        json={
+            "id": 1,
+            "grade": "A"
+        }
+    )
+
+    assert response.status_code == 400
+    print(response)
+    data = response.json
+    assert data['error'] == 'FyleError'
+
+def test_grading_2(client, h_teacher_2):
+    response = client.post(
+        '/teacher/assignments/grade',
+        headers=h_teacher_2,
+        json={
+            "id": 2,
+            "grade": "B"
+        }
+    )
+
+    assert response.status_code == 200
+
+    data = response.json['data']
+    assert data['teacher_id'] == 2
+    assert data['state'] == 'GRADED'
+
+
+def test_grading_3(client, h_teacher_2):
+    response = client.post(
+        '/teacher/assignments/grade',
+        headers=h_teacher_2,
+        json={
+            "id": 2,
+            "grade": "C"
+        }
+    )
+
+    assert response.status_code == 200
+
+    data = response.json['data']
+    assert data['teacher_id'] == 2
+    assert data['state'] == 'GRADED'
+
+def test_grading_4(client, h_teacher_2):
+    response = client.post(
+        '/teacher/assignments/grade',
+        headers=h_teacher_2,
+        json={
+            "id": 2,
+            "grade": "D"
+        }
+    )
+
+    assert response.status_code == 200
+
+    data = response.json['data']
+    assert data['teacher_id'] == 2
+    assert data['state'] == 'GRADED'
